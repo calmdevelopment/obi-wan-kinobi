@@ -1,0 +1,9 @@
+= Change Log
+
+Alle relevanten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
+Dieses Projekt hält sich an http://semver.org/[Semantic Versioning].
+
+== [unreleased] 
+
+Hier werden alle Änderungen pro Release notiert.
+
