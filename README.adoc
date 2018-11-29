@@ -65,3 +65,15 @@ nachdem Du Deine Eloquent Models verändert hast:
 ```bash
 ./artisan clear-compiled && ./artisan ide-helper:generate && ./artisan ide-helper:models --write && ./artisan ide-helper:meta
 ```
+
+== Testing
+
+```bash
+vendor/bin/phpunit
+```
+
+Die Konfiguration ist in phpunit.xml.dist hinterlegt.
+Individuelle Konfiguration und Secrets können in einer phpunit.xml abgelegt werden (z.B. als Kopie von phpunit.xml.dist).
+Phpunit bevorzugt phpunit.xml und lädt phpunit.xml.dist nur, wenn keine phpunit.xml vorhanden ist.
+
+phpunit.xml ist mittels .gitignore von der Versionskontrolle ausgeschlossen.  
