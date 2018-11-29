@@ -31,4 +31,10 @@ Generiere einen Schlüssel für Sessions und Verschlüsselung (wird in die .env 
 php artisan key:generate
 ```
 
+Lege die nötigen Datenbanktabellen an:
+
+```bash
+php artisan migrate
+```
+
 Um Deine Installation zu testen, starte `php artisan serve` und rufe http://localhost:8000 im Browser auf.
