@@ -31,4 +31,4 @@ Generiere einen Schlüssel für Sessions und Verschlüsselung (wird in die .env 
 php artisan key:generate
 ```
 
-To test your installation, run `php artisan serve` and visit http://localhost:8000.
+Um Deine Installation zu testen, starte `php artisan serve` und rufe http://localhost:8000 im Browser auf.
