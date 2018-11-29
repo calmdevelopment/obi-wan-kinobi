@@ -38,3 +38,30 @@ php artisan migrate
 ```
 
 Um Deine Installation zu testen, starte `php artisan serve` und rufe http://localhost:8000 im Browser auf.
+
+== Tools
+
+=== Aufräum Script
+
+Folgendes Script führt untenstehende cs-fixer und ide-helper tasks aus:
+
+```bash
+./cleanup.sh
+```
+
+==== CS Fixer
+
+Um Code Style Fixes für die php Dateien durchzuführen:
+
+```bash
+vendor/bin/php-cs-fixer fix
+```
+
+==== IDE Helper generieren
+
+Um Deine IDE zu unterstützen, die fortgeschrittenen Aspekte von laravel zu verstehen, lass folgende Scripte laufen,
+nachdem Du Deine Eloquent Models verändert hast:
+
+```bash
+./artisan clear-compiled && ./artisan ide-helper:generate && ./artisan ide-helper:models --write && ./artisan ide-helper:meta
+```
