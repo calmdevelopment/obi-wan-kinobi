@@ -1,3 +1,34 @@
 = Obi-Wan Kinobi
 
 Ein einfaches Filmpflege dingens für kleine Programmkinos.
+
+== Setup für Entwickler
+
+```bash
+composer install
+yarn
+```
+
+Kopiere .env.example zu .env.
+
+Passe dort die Einstellungen für die Datenbank an.
+
+Wer die Anwendung lieber in Docker-Containern ausführen will, schaue sich https://laradock.io/introduction/[laradock] an.
+
+Dies sind die in .env zu ändernden Standardeinstellungen für die Datenbank:
+
+```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=homestead
+DB_USERNAME=homestead
+DB_PASSWORD=secret
+```
+
+Generiere einen Schlüssel für Sessions und Verschlüsselung (wird in die .env Datei geschrieben)
+
+```bash
+php artisan key:generate
+```
+
+To test your installation, run `php artisan serve` and visit http://localhost:8000.
