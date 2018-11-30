@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-
 use ReflectionObject;
 
 trait TracksAttributeChanges

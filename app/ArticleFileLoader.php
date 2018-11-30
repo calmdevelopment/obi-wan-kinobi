@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Yaml\Yaml;
 
@@ -20,8 +19,10 @@ class ArticleFileLoader
 
     /**
      * @param string $path
-     * @return ArticleFileLoader
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return ArticleFileLoader
      */
     public function load(string $path): ArticleFileLoader
     {
@@ -31,6 +32,7 @@ class ArticleFileLoader
             $this->markdown = $parsed['markdown'];
             $this->frontmatter = $parsed['frontmatter'];
         }
+
         return $this;
     }
 

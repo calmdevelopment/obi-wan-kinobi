@@ -88,7 +88,7 @@ class Article implements Arrayable
     public function load(string $path = null): Article
     {
         $this->path = $path ?? $this->path;
-        $file = (new ArticleFileLoader)->load($this->path);
+        $file = (new ArticleFileLoader())->load($this->path);
 
         $this->markdown = $file->markdown();
         $this->frontmatter = $file->frontmatter();

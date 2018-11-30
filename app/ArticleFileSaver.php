@@ -1,6 +1,6 @@
 <?php
-namespace App;
 
+namespace App;
 
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Yaml\Yaml;
@@ -18,6 +18,7 @@ class ArticleFileSaver
 
     /**
      * ArticleFileSaver constructor.
+     *
      * @param array $original
      * @param array $current
      */
@@ -29,8 +30,9 @@ class ArticleFileSaver
 
     public function save()
     {
-        if($this->shouldBeCreated()) {
+        if ($this->shouldBeCreated()) {
             $this->saveToFile($this->current['path']);
+
             return;
         }
 
@@ -57,7 +59,6 @@ class ArticleFileSaver
     {
         return Yaml::dump($this->current['frontmatter']);
     }
-
 
     private function shouldBeCreated(): bool
     {
