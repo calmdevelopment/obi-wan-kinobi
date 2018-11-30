@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Traits;
+
 use Ramsey\Uuid\Uuid;
 
 trait Uuids
@@ -13,7 +15,7 @@ trait Uuids
     }
 
     /**
-     * Make sure that we create a uuid when creating a model
+     * Make sure that we create a uuid when creating a model.
      */
     protected static function boot()
     {
