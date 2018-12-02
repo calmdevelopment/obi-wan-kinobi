@@ -65,3 +65,40 @@ nachdem Du Deine Eloquent Models verändert hast:
 ```bash
 ./artisan clear-compiled && ./artisan ide-helper:generate && ./artisan ide-helper:models --write && ./artisan ide-helper:meta
 ```
+
+== Testing
+
+=== Initiales Setup
+
+Tests laufen aktuell über eine einfache sqlite DB, damit die Tests nicht die lokale DB überschreiben.
+Sollten sich dabei aufgrund von Inkompatibilitäten Schwierigkeiten ergeben, lässt sich das Testing auch auf einer
+zweiten mysql DB durchführen, was in phpunit.xml / phpunit.xml.dist angepasst werden kann.
+
+Initial muss die sqlite DB angelegt werden:
+
+```bash
+touch database/database.sqlite
+```
+
+=== Testing und Konfiguration
+
+```bash
+vendor/bin/phpunit
+```
+
+Die Konfiguration ist in phpunit.xml.dist hinterlegt.
+Individuelle Konfiguration und Secrets können in einer phpunit.xml abgelegt werden (z.B. als Kopie von phpunit.xml.dist).
+Phpunit bevorzugt phpunit.xml und lädt phpunit.xml.dist nur, wenn keine phpunit.xml vorhanden ist.
+
+phpunit.xml ist mittels .gitignore von der Versionskontrolle ausgeschlossen.
+
+File-Storage für Tests ist in phpunit.xml.dist bzw. config/filesystems.php so konfiguriert, dass er nicht mit
+dem normalen File-Storage kollidiert -> storage/framework/testing/disks/testing.
+
+== Konzepte
+
+Artikel (Article) sind keine Eloquent Models. Sie haben keine Entsprechung in der Datenbank, sondern werden
+von Flatfiles geladen und in Flatfiles persistiert.
+
+Änderungen werden erst nach Aufruf der Methode `$article->save()` persistiert.
+Wird der path eines Articles verändert, wird auch das Flatfile verschoben.
