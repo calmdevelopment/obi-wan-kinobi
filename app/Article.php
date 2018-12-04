@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\TracksAttributeChanges;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class Article implements Arrayable
 {
@@ -82,6 +83,7 @@ class Article implements Arrayable
      * @param string $path
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException                                         when the Yaml is syntactically wrong
      *
      * @return Article
      */

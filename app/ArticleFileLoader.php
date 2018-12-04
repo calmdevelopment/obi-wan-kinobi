@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Yaml\Yaml;
 
@@ -18,6 +19,11 @@ class ArticleFileLoader
     protected $frontmatter;
 
     /**
+     * @var string
+     */
+    protected $path;
+
+    /**
      * @param string $path
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -26,7 +32,8 @@ class ArticleFileLoader
      */
     public function load(string $path): ArticleFileLoader
     {
-        if (Storage::exists($path)) {
+        $this->path = $path;
+        if (Storage::exists($this->path)) {
             $rawFileContent = Storage::get($path);
             $parsed = $this->parseFrontmatterAndMarkdown($rawFileContent);
             $this->markdown = $parsed['markdown'];
@@ -42,16 +49,19 @@ class ArticleFileLoader
         $tokenLength = strlen($token);
         $beginIdx = strpos($content, $token) + $tokenLength;
         $frontMatter = null;
-        if ($beginIdx === $tokenLength && false !== ($endIdx = strpos($content, $token, $beginIdx + $tokenLength))) {
+        if ($beginIdx === $tokenLength && false !== ($endIdx = strpos($content, $token, $beginIdx))) {
             $rawFrontMatter = substr($content, $beginIdx, $endIdx - $beginIdx);
             $frontMatter = Yaml::parse($rawFrontMatter, Yaml::PARSE_CUSTOM_TAGS);
             $content = substr($content, $endIdx + $tokenLength);
+        }
+        if (! is_array($frontMatter)) {
+            Log::warning("Ignoring unexpected YAML format in frontmatter of file '{$this->path}':\n\n{$frontMatter}\n");
         }
 
         return [
             'frontmatter' => array_replace_recursive(
                 $defaults,
-                $frontMatter ?? []
+                is_array($frontMatter) ? $frontMatter : []
             ),
             'markdown' => $content,
         ];

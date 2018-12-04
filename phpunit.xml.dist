@@ -32,5 +32,6 @@
         <env name="DB_CONNECTION" value="sqlite" />
         <env name="DB_DATABASE" value="database/database.sqlite" />
         <env name="FILESYSTEM_DRIVER" value="testing" />
+        <env name="LOG_CHANNEL" value="testing" />
     </php>
 </phpunit>
