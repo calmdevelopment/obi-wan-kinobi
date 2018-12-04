@@ -318,4 +318,59 @@ class ArticleTest extends TestCase
         $this->assertEquals('', $article->getMarkdown());
         $this->assertEquals([], $article->getFrontmatter());
     }
+
+    /**
+     * @test
+     * @group yaml
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function it_keeps_unmanaged_yaml_properties_after_updating()
+    {
+        // Given we have an article with yaml
+        $yaml = [
+            'unhandled_prop' => [
+                'unhandled' => true,
+            ],
+            'title' => 'test',
+            'unhandled_property' => 3,
+        ];
+        $article = create_fake_article([
+            'frontmatter' => $yaml,
+        ]);
+        $this->assertEquals($yaml, $article->getFrontmatter());
+        // When we update the yaml
+        $newTitle = 'title';
+        $article->updateFrontmatter([
+            'title' => $newTitle,
+        ]);
+        // And persist the article
+        $article->save();
+        // And load the article
+        $article = $article->fresh();
+        // Then we expect the other properties still to be present, while the updated property has changed
+        $yaml['title'] = $newTitle;
+        $this->assertEquals($yaml, $article->getFrontmatter());
+    }
+
+    /**
+     * @test
+     * @group yaml
+     */
+    public function it_allows_to_set_yaml_properties_without_merging_to_be_able_to_delete_unmanaged_props()
+    {
+        $article = create_fake_article([
+            'frontmatter' => [
+                'title' => 'test',
+                'unmanaged' => true,
+            ],
+        ]);
+        $article->setFrontmatter([
+            'title' => 'title',
+        ]);
+        $article->save();
+        $article = $article->fresh();
+        $this->assertNotContains('unmanaged', array_keys($article->getFrontmatter()));
+        $this->assertEquals(['title' => 'title'], $article->getFrontmatter());
+    }
 }

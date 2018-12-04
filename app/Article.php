@@ -79,6 +79,13 @@ class Article implements Arrayable
         return $this->frontmatter;
     }
 
+    public function setFrontmatter(array $assoc): array
+    {
+        $this->frontmatter = $assoc;
+
+        return $this->frontmatter;
+    }
+
     /**
      * @param string $path
      *
