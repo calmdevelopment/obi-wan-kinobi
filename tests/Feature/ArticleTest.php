@@ -70,6 +70,7 @@ class ArticleTest extends TestCase
 
     /**
      * @test
+     * @markdown
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -102,6 +103,7 @@ class ArticleTest extends TestCase
 
     /**
      * @test
+     * @group markdown
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -279,5 +281,41 @@ class ArticleTest extends TestCase
         return [
             ["wrong_indentation:\n\t\t\tkey: value"],
         ];
+    }
+
+    /**
+     * @test
+     * @group markdown
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_can_handle_empty_markdown()
+    {
+        $path = fake_hierarchical_slug();
+        // no markdown
+        Storage::put($path, "---\ntitle: title---\n");
+        $article = new Article(['path' => $path]);
+        $article->load();
+        $this->assertEquals('', $article->getMarkdown());
+    }
+
+    /**
+     * @test
+     * @group markdown
+     * @group yaml
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_can_handle_both_empty_fronmatter_and_empty_markdown()
+    {
+        $path = fake_hierarchical_slug();
+        // no markdown
+        Storage::put($path, "---\n---\n");
+        $article = new Article(['path' => $path]);
+        $article->load();
+        $this->assertEquals('', $article->getMarkdown());
+        $this->assertEquals([], $article->getFrontmatter());
     }
 }
