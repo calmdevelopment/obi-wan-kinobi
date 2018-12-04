@@ -308,7 +308,7 @@ class ArticleTest extends TestCase
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws ParseException
      */
-    public function it_can_handle_both_empty_fronmatter_and_empty_markdown()
+    public function it_can_handle_both_empty_frontmatter_and_empty_markdown()
     {
         $path = fake_hierarchical_slug();
         // no markdown
