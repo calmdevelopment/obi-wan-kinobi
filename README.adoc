@@ -1,5 +1,7 @@
 = Obi-Wan Kinobi
 
+image:https://travis-ci.org/calmdevelopment/obi-wan-kinobi.svg?branch=master["Build Status", link="https://travis-ci.org/calmdevelopment/obi-wan-kinobi"]
+
 Ein einfaches Filmpflege dingens für kleine Programmkinos.
 
 == Setup für Entwickler
