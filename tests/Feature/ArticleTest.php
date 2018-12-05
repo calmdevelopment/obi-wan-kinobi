@@ -4,8 +4,12 @@ namespace Tests\Feature;
 
 use App\Article;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 use Tests\TestCase;
+use TiMacDonald\Log\LogFake;
 
 /**
  * @group article
@@ -66,6 +70,7 @@ class ArticleTest extends TestCase
 
     /**
      * @test
+     * @markdown
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -98,6 +103,7 @@ class ArticleTest extends TestCase
 
     /**
      * @test
+     * @group markdown
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -136,5 +142,235 @@ class ArticleTest extends TestCase
         Storage::assertExists($article->getPath());
         $article->delete();
         Storage::assertMissing($article->getPath());
+    }
+
+    /**
+     * @test
+     * @group yaml
+     * @dataProvider validYamlProvider
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_loads_valid_yaml($validYaml, $expectedResult)
+    {
+        $path = fake_hierarchical_slug();
+        Storage::put($path, "---\n{$validYaml}---\n# Heading");
+        $article = new Article(['path' => $path]);
+        $article->load();
+        $this->assertEquals($expectedResult, $article->getFrontmatter());
+        $this->assertEquals('# Heading', $article->getMarkdown());
+    }
+
+    public function validYamlProvider()
+    {
+        return [
+            // data set #0
+            [
+                // validYaml
+                "title: title\n",
+
+                // expectedResult
+                [
+                    'title' => 'title',
+                ],
+            ],
+            // data set #1
+            [
+                "images:\n".
+                "   - { ref: my-image, caption: 'my caption' }\n".
+                "   - { ref: another-image, caption: 'another caption' }\n",
+
+                [
+                    'images' => [
+                        [
+                            'ref' => 'my-image',
+                            'caption' => 'my caption',
+                        ],
+                        [
+                            'ref' => 'another-image',
+                            'caption' => 'another caption',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @group yaml
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_can_handle_empty_frontmatter()
+    {
+        $path = fake_hierarchical_slug();
+        Storage::put($path, "---\n---\n# Heading");
+        $article = new Article(['path' => $path]);
+        $article->load();
+        $this->assertEquals([], $article->getFrontmatter());
+        $this->assertEquals('# Heading', $article->getMarkdown());
+    }
+
+    /**
+     * @test
+     * @group yaml
+     * @dataProvider unexpectedYamlProvider
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_handles_unexpected_yaml_format_gracefully_and_logs_it($unexpectedYaml)
+    {
+        // make sure we can assert logging
+        Log::swap(new LogFake());
+
+        // given we have an article with unexpected yaml format in frontmatter
+        $path = fake_hierarchical_slug();
+        $markdown = '# Heading';
+        Storage::put($path, "---\n{$unexpectedYaml}---\n{$markdown}");
+        $article = new Article(['path' => $path]);
+        // when we load that article
+        $article->load();
+
+        // then we expect the unexpected yaml to be ignored and an empty array to be returned instead
+        $this->assertEquals([], $article->getFrontmatter());
+        // and we expect this to be logged as a warning
+        Log::assertLogged('warning');
+        // and to have access to the markdown
+        $this->assertEquals($markdown, $article->getMarkdown());
+    }
+
+    /**
+     * Provides us with a set of unexpected yaml frontmatter, that will usually not result in an assoc array.
+     *
+     * @return array
+     */
+    public function unexpectedYamlProvider(): array
+    {
+        return [
+            // no space between key and value
+            ["title:asdf\n"],
+            // no key / value
+            ["nokeyvalue\n"],
+        ];
+    }
+
+    /**
+     * @test
+     * @group yaml
+     * @dataProvider yamlSyntaxErrorProvider
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @expectedException \Symfony\Component\Yaml\Exception\ParseException
+     */
+    public function it_throws_an_exception_when_frontmatter_is_syntactically_wrong($syntacticallyWrongYaml)
+    {
+        $path = fake_hierarchical_slug();
+        $markdown = '# Heading';
+        Storage::put($path, "---\n{$syntacticallyWrongYaml}---\n{$markdown}");
+        $article = new Article(['path' => $path]);
+        // we expect a ParseException here (see @expectedException)
+        $article->load();
+    }
+
+    public function yamlSyntaxErrorProvider(): array
+    {
+        return [
+            ["wrong_indentation:\n\t\t\tkey: value"],
+        ];
+    }
+
+    /**
+     * @test
+     * @group markdown
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_can_handle_empty_markdown()
+    {
+        $path = fake_hierarchical_slug();
+        // no markdown
+        Storage::put($path, "---\ntitle: title---\n");
+        $article = new Article(['path' => $path]);
+        $article->load();
+        $this->assertEquals('', $article->getMarkdown());
+    }
+
+    /**
+     * @test
+     * @group markdown
+     * @group yaml
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws ParseException
+     */
+    public function it_can_handle_both_empty_frontmatter_and_empty_markdown()
+    {
+        $path = fake_hierarchical_slug();
+        // no markdown
+        Storage::put($path, "---\n---\n");
+        $article = new Article(['path' => $path]);
+        $article->load();
+        $this->assertEquals('', $article->getMarkdown());
+        $this->assertEquals([], $article->getFrontmatter());
+    }
+
+    /**
+     * @test
+     * @group yaml
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function it_keeps_unmanaged_yaml_properties_after_updating()
+    {
+        // Given we have an article with yaml
+        $yaml = [
+            'unhandled_prop' => [
+                'unhandled' => true,
+            ],
+            'title' => 'test',
+            'unhandled_property' => 3,
+        ];
+        $article = create_fake_article([
+            'frontmatter' => $yaml,
+        ]);
+        $this->assertEquals($yaml, $article->getFrontmatter());
+        // When we update the yaml
+        $newTitle = 'title';
+        $article->updateFrontmatter([
+            'title' => $newTitle,
+        ]);
+        // And persist the article
+        $article->save();
+        // And load the article
+        $article = $article->fresh();
+        // Then we expect the other properties still to be present, while the updated property has changed
+        $yaml['title'] = $newTitle;
+        $this->assertEquals($yaml, $article->getFrontmatter());
+    }
+
+    /**
+     * @test
+     * @group yaml
+     */
+    public function it_allows_to_set_yaml_properties_without_merging_to_be_able_to_delete_unmanaged_props()
+    {
+        $article = create_fake_article([
+            'frontmatter' => [
+                'title' => 'test',
+                'unmanaged' => true,
+            ],
+        ]);
+        $article->setFrontmatter([
+            'title' => 'title',
+        ]);
+        $article->save();
+        $article = $article->fresh();
+        $this->assertNotContains('unmanaged', array_keys($article->getFrontmatter()));
+        $this->assertEquals(['title' => 'title'], $article->getFrontmatter());
     }
 }
