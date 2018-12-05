@@ -72,15 +72,11 @@ nachdem Du Deine Eloquent Models verändert hast:
 
 === Initiales Setup
 
-Tests laufen aktuell über eine einfache sqlite DB, damit die Tests nicht die lokale DB überschreiben.
+Tests laufen aktuell über eine in memory sqlite DB – aus Performancegründen und
+damit die Tests nicht die lokale DB überschreiben.
+
 Sollten sich dabei aufgrund von Inkompatibilitäten Schwierigkeiten ergeben, lässt sich das Testing auch auf einer
 zweiten mysql DB durchführen, was in phpunit.xml / phpunit.xml.dist angepasst werden kann.
-
-Initial muss die sqlite DB angelegt werden:
-
-```bash
-touch database/database.sqlite
-```
 
 === Testing und Konfiguration
 
