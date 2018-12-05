@@ -1,0 +1,24 @@
+language: php
+php:
+- '7.2'
+- '7.1'
+
+env:
+  - DB=sqlite
+
+cache:
+  directories:
+    - vendor
+    - node_modules
+
+install:
+  - composer install
+  - yarn
+
+before_script:
+  - touch database/database.sqlite
+  - cp .env.example .env
+  - php artisan key:generate
+
+script:
+  - vendor/bin/phpunit
