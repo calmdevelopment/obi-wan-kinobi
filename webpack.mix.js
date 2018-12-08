@@ -1,5 +1,5 @@
 const mix = require('laravel-mix');
-
+require('laravel-mix-purgecss');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -12,4 +12,12 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/app.scss', 'public/css')
+    .purgeCss({
+        // enabled: true, // <- is enabled by default in prod mode. Use this to debug in dev mode
+        //
+        // If you encounter css that is removed but needed, then whitelist it according to the docs:
+        // https://www.purgecss.com/whitelisting
+        //
+        // whitelist: []
+    });
