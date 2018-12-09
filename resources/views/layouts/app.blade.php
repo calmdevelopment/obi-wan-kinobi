@@ -12,8 +12,8 @@
     {{-- --}}
     <div id="app" :class="{isTouchDevice}">
         <input type="checkbox" id="toggle-nav">
-        <header class="global" ref="topNavigation">
-            <nav style="--num-items: 3">
+        <header class="global">
+            <nav>
                 <a href="{{ url('/') }}" class="home">
                     <i class="fa fa-home" aria-hidden="true"></i>
                     <span>Kinobi</span>
@@ -34,7 +34,7 @@
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <span>{{ Auth::user()->name }}</span>
                     </a>
-
+                    {{--TODO replace JS form submit --}}
                     <a href="{{ route('logout') }}"
                        onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();"
@@ -49,27 +49,36 @@
             </form>
         </header>
         <div class="main-navigation">
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-            <a href="#">asdfasdf</a>
-
+            <nav aria-labelledby="main-navigation-header">
+                <h2 id="main-navigation-header">Navigation</h2>
+                <h3>Artikel</h3>
+                <a href="#">
+                    <i class="fa fa-file fa-2x" aria-hidden="true"></i>
+                    <span>Neu</span>
+                </a>
+                <a href="#"><i class="fa fa-clock-o fa-2x" aria-hidden="true"></i>
+                    <span>Letzte Artikel</span>
+                </a>
+                <a href="#"><i class="fa fa-folder fa-2x" aria-hidden="true"></i>
+                    <span>Seitenstruktur</span>
+                </a>
+                <h3>Events und Filme</h3>
+                <a href="#">
+                    <i class="fa fa-calendar-plus-o fa-2x" aria-hidden="true"></i>
+                    <span>Neu</span>
+                </a>
+                <a href="#">
+                    <span class="fa-stack">
+                        <i class="fa fa-calendar-o fa-stack-2x" aria-hidden="true"></i>
+                        <i class="fa fa-clock-o fa-stack-1x" aria-hidden="true"></i>
+                    </span>
+                    <span>Letzte Events</span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
+                    <span>Nach Zeit</span>
+                </a>
+            </nav>
         </div>
         <main class="py-4" ref="main">
             @yield('content')
@@ -92,11 +101,24 @@
         @auth
             <div class="shortcut">
                 <nav>
-                    <a class="nav-logout" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>
-                        <span>{{ __('Logout') }}1</span>
+                    <a href="#">
+                        <i class="fa fa-file fa-2x" aria-hidden="true"></i>
+                        <span class="hidden">Neuer Artikel</span>
+                    </a>
+                    <a href="#">
+                        <i class="fa fa-clock-o fa-2x" aria-hidden="true"></i>
+                        <span class="hidden">Letzte Artikel</span>
+                    </a>
+                    <a href="#">
+                        <i class="fa fa-calendar-plus-o fa-2x" aria-hidden="true"></i>
+                        <span class="hidden">Neuer Event</span>
+                    </a>
+                    <a href="#">
+                        <span class="fa-stack">
+                            <i class="fa fa-calendar-o fa-stack-2x" aria-hidden="true"></i>
+                            <i class="fa fa-clock-o fa-stack-1x" aria-hidden="true"></i>
+                        </span>
+                        <span class="hidden">Letzte Events</span>
                     </a>
                 </nav>
                 <label for="toggle-nav">☰</label>

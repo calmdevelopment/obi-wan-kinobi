@@ -1,16 +1,10 @@
-
-// Body
-$body-bg: #f8fafc;
-$text-fg: #555;
-
 // Typography
 $font-family-sans-serif: "open-sans", sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
 
 // Colors
 $grey-darkest: #333;
 $grey-darker: #444;
+$grey-dark: #555;
 $grey-lightest: #ddd;
 $blue: #3490dc;
 $indigo: #6574cd;
@@ -24,6 +18,8 @@ $teal: #4dc0b5;
 $cyan: #6cb2eb;
 
 // context
+$body-bg: #f8fafc;
+$text-fg: $grey-dark;
 
 $dark-box-bg: $grey-darkest;
 $dark-box-fg: $grey-lightest;

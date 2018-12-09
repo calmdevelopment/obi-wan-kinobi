@@ -1,10 +1,11 @@
-@import 'fonts';
-@import 'variables';
-@import 'nav';
-
+// use border-box as default sizing method to simplify dimension calculations
 *, *:before, *:after {
     box-sizing: border-box;
 }
+
+@import 'fonts';
+@import 'variables';
+@import 'nav';
 
 body {
     font-family: $font-family-sans-serif;
@@ -12,9 +13,11 @@ body {
     background-color: $body-bg;
     color: $text-fg;
 
+    // child elements shall stretch to the full height
     display: flex;
     flex-flow: column nowrap;
     justify-content: stretch;
+
     min-height: 100vh;
     min-width: 320px;
     margin: 0;
@@ -26,136 +29,12 @@ body {
     flex-flow: column nowrap;
 }
 
-%nav-bar {
-    display: grid;
-
-    justify-items: center;
-    justify-content: stretch;
-    overflow: auto;
-
-    & > * {
-        padding: .75rem;
-        text-align: center;
-    }
-}
-
-%nav-bar-1-row {
-    grid-auto-flow: column;
-    grid-template-columns: minmax(10rem, max-content) auto repeat(auto-fill, minmax(10rem, max-content));
-}
-
-%nav-bar-1-row-scroll {
-    width: 100%;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
-    overflow: auto;
-}
-%nav-bar-multi-rows {
-    width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
-    grid-auto-flow: row;
-    justify-content: end;
-}
-
-%nav-bar-responsive {
-    // 1 row scrollable
-
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
-    overflow: auto;
-
-    margin-left: auto;
-    @media all and (min-height: 640px) {
-        // multi-rows
-        grid-auto-flow: row;
-        width: 100%;
-        justify-content: end;
-    }
-}
-.global, .shortcut {
-    background-color: rgba($grey-darkest,.9);
-    color: $dark-box-fg;
-    box-shadow: 0 0 10px rgba(#000, .5);
-    a, label {
-        position: relative;
-    }
-    a:hover, a:focus, label:hover, label:focus {
-        color: #fff;
-        background-color: $grey-darkest;
-        &:after {
-            content: '';
-            position: absolute;
-            left:0;
-            right: 0;
-            bottom: 0;
-            height: 3px;
-            background-color: $teal;
-        }
-    }
-    a.active, label.active {
-        &:after {
-            content: '';
-            position: absolute;
-            left:0;
-            right: 0;
-            bottom: 0;
-            height: 3px;
-            background-color: $teal;
-        }
-    }
-}
-.global nav {
-    @extend %nav-bar;
-    @extend %nav-bar-1-row;
-    .home {
-        order: -1;
-        justify-self: start;
-    }
-    .login, .logout {
-        order: 100;
-        justify-self: end;
-    }
-}
-.shortcut {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: stretch;
-    align-items: stretch;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    nav {
-        @extend %nav-bar;
-        //@extend %nav-bar-multi-rows;
-        @extend %nav-bar-responsive;
-        margin-left: auto;
-
-        //@media all and (min-height: 640px) {
-        //    @extend %nav-bar-1-row-scroll;
-        //    width: auto;
-        //}
-
-    }
-}
-label[for="toggle-nav"] {
-    color: $dark-box-fg;
-    width: 4rem;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    //margin-left: auto;
-}
-
-.main-navigation {
-    display: flex;
-    flex-flow: column nowrap;
-    background-color: rgba($grey-darkest, .9);
-    color: #fff;
-    a {
-        color: inherit;
-    }
+// use this class to hide text, but keep it for screen-readers
+.hidden {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
 }
 
 

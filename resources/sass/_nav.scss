@@ -1,1 +1,250 @@
-@import 'nav/common';
+nav a {
+    color: inherit;
+    text-decoration: none;
+}
+
+// The checkbox whose state is responsible for showing / hiding the main navigation.
+#toggle-nav {
+    // it shall not be visible
+    position: fixed;
+    top: 0;
+    left: -100px;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+// by default, it hides the main-navigation
+#toggle-nav ~ .main-navigation{
+    position: fixed;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    // hide by translating it down the full height of toggle-nav
+    transform: translateY(100%);
+    transition: transform .25s;
+}
+
+// once #toggle-nav is checked, it shows the main-navigation
+#toggle-nav:checked ~ .main-navigation {
+    // show by translating it 0 px down (hidden state translates it 100% down)
+    transform: translateY(0);
+    // also use scrollbars if not all menu items fit into the main-navigation
+    overflow: auto;
+}
+
+// This label is the hamburger icon which triggers the state change of #toggle-nav and thus
+// the main navigation's visibility.
+label[for='toggle-nav'] {
+    cursor: pointer;
+}
+
+// common nav-bar styling (applied to top bar, and the bottom bar's responsive variants)
+%nav-bar {
+    display: grid;
+
+    justify-items: center;
+    justify-content: stretch;
+    overflow: auto;
+
+    // nav-bar items (buttons)
+    & > * {
+        padding: .75rem;
+        text-align: center;
+    }
+}
+
+// this means .active, not :active. See below.
+%active-nav-item {
+    &:after {
+        content: '';
+        position: absolute;
+        left:0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        background-color: $teal;
+    }
+}
+
+%hovered-or-focused-nav-item {
+    color: #fff;
+    background-color: $grey-darkest;
+    position: relative;
+    // notice that this causes a double tap issue on iOS devices. So it will be deactivated on touch devices later on.
+    @extend %active-nav-item;
+}
+
+%nav-item {
+    // to be able to use the absolute positioning of :after
+    position:relative;
+    &:hover, &:focus {
+        @extend %hovered-or-focused-nav-item;
+    }
+    // applied in blade when we are on the route that is linked to by this item
+    &.active {
+        @extend %active-nav-item;
+    }
+}
+
+// fix for double tap issue on iOS: is applied only when a touch device is recognized (see app.js)
+%nav-item-touch-device-fix {
+    // Solve iOS double tap issue:
+    // When there's a hover state that changes the display or visibility of an element on the page
+    // (e.g. by adding a pseudo element), then the iOS device will force the user to tap the button again.
+    // This is solved by not changing the elements on hover:
+    &:hover, &:focus {
+        &:after {
+            content: none;
+        }
+    }
+}
+// top (.global) and bottom (.shortcut) navigation bars
+.global, .shortcut {
+    background-color: rgba($dark-box-bg,.9);
+    color: $dark-box-fg;
+    box-shadow: 0 0 10px rgba(#000, .5);
+
+    a, label {
+        @extend %nav-item;
+    }
+}
+
+.isTouchDevice {
+    .global, .shortcut {
+        a, label {
+            @extend %nav-item-touch-device-fix;
+        }
+    }
+}
+
+// the top navigation
+.global nav {
+    @extend %nav-bar;
+    // first fill columns, adding new columns when there are no rows left
+    // as we only have one row, this means: auto place horizontally and create columns as you go
+    grid-auto-flow: column;
+
+    .home {
+        // place .home on the first column
+        order: -1;
+        // and align it left
+        justify-self: start;
+    }
+    .login, .logout {
+        // place .login (x)or .logout in the rightmost column
+        order: 100;
+        // and align it right
+        justify-self: end;
+    }
+}
+
+// the bottom navigation container
+.shortcut {
+    // we have the navigation itself and the hamburger button side by side
+    // a reason for the separation of the navigation and the hamburger
+    // button is, that the navigation may wrap or may be scrollable
+    // depending on the amount of items and the viewport width
+    // AND height. The hamburger button shall always be
+    // placed at the rightmost edge, the navigation
+    // shall also be justified right.
+
+    display: flex;
+    flex-flow: row nowrap;
+    // we put everything to the right
+    justify-content: flex-end;
+    // we stretch the nav's or the hamburger button's height if necessary
+    align-items: stretch;
+
+    // the shortcut navigation shall always be visible to the bottom of the screen
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    // the shortcuts
+    nav {
+        @extend %nav-bar;
+
+        // 1 row scrollable
+        grid-auto-flow: column;
+        grid-auto-columns: 6rem;
+        overflow: auto;
+        margin-left: auto;
+
+        @media all and (min-height: 640px) {
+            // multi-rows once the viewport's height is tall enough
+            grid-auto-columns: initial;
+            grid-auto-flow: row;
+            grid-template-columns: repeat(auto-fit, minmax(6rem, max-content));
+            width: 100%;
+            justify-content: end;
+        }
+    }
+}
+
+label[for="toggle-nav"] {
+    // ensure we have a minimum of 4rem width
+    width: 4rem;
+    // and don't you go below that width
+    flex-shrink: 0;
+
+    // make the icon vertically and horizontally centered
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// main-navigation container
+.main-navigation {
+    display: flex;
+    flex-flow: column nowrap;
+    // we need to justify at start, otherwise scrolling up would not be possible if the items wouldn't fit into
+    // the viewport height
+    justify-content: start;
+    // center the actual nav horizontally
+    align-items: center;
+
+    // make a scrollbar appear if the nav doesn't fit into the viewport height
+    overflow: auto;
+
+
+    background-color: rgba($dark-box-bg, .9);
+    color: $dark-box-fg;
+
+    nav {
+        // center the nav vertically if the amount of items fit into the viewport
+        margin-top: auto;
+        margin-bottom: auto;
+
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: start;
+        // make sure, all navigation items have equal width. The widest item defines the width.
+        align-items: stretch;
+        // allocate some space at the bottom to prevent the bottom bar from covering the last item
+        padding-bottom: 5rem;
+    }
+    h3 {
+        margin: 2rem 0 .5rem 0;
+    }
+    a {
+        padding: 1rem 3rem;
+        color: inherit;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        &>*:first-child {
+            margin-right: 1rem;
+        }
+        &:hover, &:focus {
+            @extend %hovered-or-focused-nav-item;
+        }
+    }
+    a:hover, a:focus {
+        color: #fff;
+    }
+}
+
