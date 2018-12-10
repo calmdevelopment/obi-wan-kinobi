@@ -9,7 +9,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    {{-- --}}
+    {{--
+        Vue sets class="isTouchDevice" or class="" depending
+        on the vue root data isTouchDevice (see app.js)
+    --}}
     <div id="app" :class="{isTouchDevice}">
         <input type="checkbox" id="toggle-nav">
         <header class="global">
@@ -19,6 +22,7 @@
                     <span>Kinobi</span>
                 </a>
                 @guest
+                    {{-- only applied when not logged in (guest) --}}
                     <a href="{{ route('login') }}" class="login">
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <span>{{ __('Login') }}</span>
@@ -30,7 +34,8 @@
                         </a>
                     @endif
                 @else
-                    <a class="user">
+                    {{-- only applied when logged in --}}
+                    <a class="user" href="#">
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <span>{{ Auth::user()->name }}</span>
                     </a>
@@ -52,6 +57,7 @@
             <nav aria-labelledby="main-navigation-header">
                 <h2 id="main-navigation-header">Navigation</h2>
                 <h3>Artikel</h3>
+                {{-- TODO replace dummy links with real routes once they are present --}}
                 <a href="#">
                     <i class="fa fa-file fa-2x" aria-hidden="true"></i>
                     <span>Neu</span>
@@ -80,27 +86,24 @@
                 </a>
             </nav>
         </div>
-        <main class="py-4" ref="main">
+        <main>
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+            @if (session('resent'))
+                <div class="alert alert-success" role="alert">
+                    {{ __('A fresh verification link has been sent to your email address.') }}
+                </div>
+            @endif
             @yield('content')
-            <p>asdf ölaskdfj öalsdkfj öalsdfj öasldfjk asödlkfjldkfj aösldfkj asödlfj asdölfkj  öalsdfja
-            öalsdkfj asödlfkjas fölka öadlskjf öasldfkj asödlfkj asödlfkj aöslfkj ölasdkjf öasldkfj öasldfkj
-            öalsdfkja söflkas ö aaksiweifnwein iw aivn asdlf aiwe f</p>
-            <p>asdf ölaskdfj öalsdkfj öalsdfj öasldfjk asödlkfjldkfj aösldfkj asödlfj asdölfkj  öalsdfja
-                öalsdkfj asödlfkjas fölka öadlskjf öasldfkj asödlfkj asödlfkj aöslfkj ölasdkjf öasldkfj öasldfkj
-                öalsdfkja söflkas ö aaksiweifnwein iw aivn asdlf aiwe f</p>
-            <p>asdf ölaskdfj öalsdkfj öalsdfj öasldfjk asödlkfjldkfj aösldfkj asödlfj asdölfkj  öalsdfja
-                öalsdkfj asödlfkjas fölka öadlskjf öasldfkj asödlfkj asödlfkj aöslfkj ölasdkjf öasldkfj öasldfkj
-                öalsdfkja söflkas ö aaksiweifnwein iw aivn asdlf aiwe f</p>
-            <p>asdf ölaskdfj öalsdkfj öalsdfj öasldfjk asödlkfjldkfj aösldfkj asödlfj asdölfkj  öalsdfja
-                öalsdkfj asödlfkjas fölka öadlskjf öasldfkj asödlfkj asödlfkj aöslfkj ölasdkjf öasldkfj öasldfkj
-                öalsdfkja söflkas ö aaksiweifnwein iw aivn asdlf aiwe f</p>
-            <p>asdf ölaskdfj öalsdkfj öalsdfj öasldfjk asödlkfjldkfj aösldfkj asödlfj asdölfkj  öalsdfja
-                öalsdkfj asödlfkjas fölka öadlskjf öasldfkj asödlfkj asödlfkj aöslfkj ölasdkjf öasldkfj öasldfkj
-                öalsdfkja söflkas ö aaksiweifnwein iw aivn asdlf aiwe f</p>
         </main>
         @auth
+            {{-- only applied if authenticated / logged in --}}
             <div class="shortcut">
                 <nav>
+                    {{-- TODO replace dummy links with routes once they are present --}}
                     <a href="#">
                         <i class="fa fa-file fa-2x" aria-hidden="true"></i>
                         <span class="hidden">Neuer Artikel</span>

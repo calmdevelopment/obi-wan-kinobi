@@ -100,3 +100,9 @@ von Flatfiles geladen und in Flatfiles persistiert.
 
 Änderungen werden erst nach Aufruf der Methode `$article->save()` persistiert.
 Wird der path eines Articles verändert, wird auch das Flatfile verschoben.
+
+== Troubleshooting FAQ
+
+=== Ich habe die `.env` Einstellungen verändert, aber die Änderungen scheinen nicht zu greifen
+* Wenn Du die Anwendung mit `./artisan serve` betreibst, starte `./artisan serve` neu.
+

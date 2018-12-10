@@ -37,6 +37,32 @@ body {
     overflow: hidden;
 }
 
+main {
+    padding: 1rem;
+    &>*:first-child {
+        margin-top: 0;
+    }
+}
 
+h1, h2, h3 {
+    font-weight: $font-weight-light;
+}
+
+.alert {
+    position: sticky;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding: 1rem;
+    border: 1px solid $grey-dark;
+    background-color: rgba($grey-lightest,.9);
+    color: $text-fg;
+}
+
+.alert-success {
+    border: 1px solid $green-dark;
+    background-color: rgba($green-light, .9);
+    color: $green-dark;
+}
 
 
