@@ -6,6 +6,7 @@
 @import 'fonts';
 @import 'variables';
 @import 'nav';
+@import 'form';
 
 body {
     font-family: $font-family-sans-serif;
@@ -42,6 +43,17 @@ main {
     &>*:first-child {
         margin-top: 0;
     }
+    display: flex;
+    flex-flow: column nowrap;
+
+    a {
+        color: $teal;
+    }
+}
+
+.center{
+    margin-left: auto;
+    margin-right: auto;
 }
 
 h1, h2, h3 {

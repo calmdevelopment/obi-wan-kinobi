@@ -5,6 +5,7 @@ $font-family-sans-serif: "open-sans", sans-serif;
 $grey-darkest: #333;
 $grey-darker: #444;
 $grey-dark: #555;
+$grey: #999;
 $grey-lightest: #ddd;
 $blue: #3490dc;
 $indigo: #6574cd;
@@ -25,3 +26,7 @@ $text-fg: $grey-dark;
 
 $dark-box-bg: $grey-darkest;
 $dark-box-fg: $grey-lightest;
+
+$form-input-border: $grey;
+$form-input-focus: $teal;
+$form-input-error: $red;
