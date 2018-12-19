@@ -13,7 +13,7 @@
         Vue sets class="isTouchDevice" or class="" depending
         on the vue root data isTouchDevice (see app.js)
     --}}
-    <div id="app" :class="{isTouchDevice}">
+    <div id="app" :class="{isTouchDevice}" @auth class="auth" @else class="guest" @endauth>
         <input type="checkbox" id="toggle-nav">
         <header class="global">
             <nav>
@@ -53,39 +53,42 @@
                 @csrf
             </form>
         </header>
-        <div class="main-navigation">
-            <nav aria-labelledby="main-navigation-header">
-                <h2 id="main-navigation-header">Navigation</h2>
-                <h3>Artikel</h3>
-                {{-- TODO replace dummy links with real routes once they are present --}}
-                <a href="#">
-                    <i class="fa fa-file fa-2x" aria-hidden="true"></i>
-                    <span>Neu</span>
-                </a>
-                <a href="#"><i class="fa fa-clock-o fa-2x" aria-hidden="true"></i>
-                    <span>Letzte Artikel</span>
-                </a>
-                <a href="#"><i class="fa fa-folder fa-2x" aria-hidden="true"></i>
-                    <span>Seitenstruktur</span>
-                </a>
-                <h3>Events und Filme</h3>
-                <a href="#">
-                    <i class="fa fa-calendar-plus-o fa-2x" aria-hidden="true"></i>
-                    <span>Neu</span>
-                </a>
-                <a href="#">
-                    <span class="fa-stack">
-                        <i class="fa fa-calendar-o fa-stack-2x" aria-hidden="true"></i>
-                        <i class="fa fa-clock-o fa-stack-1x" aria-hidden="true"></i>
-                    </span>
-                    <span>Letzte Events</span>
-                </a>
-                <a href="#">
-                    <i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
-                    <span>Nach Zeit</span>
-                </a>
-            </nav>
-        </div>
+        @auth
+            {{-- only applied if authenticated / logged in --}}
+            <div class="main-navigation">
+                <nav aria-labelledby="main-navigation-header">
+                    <h2 id="main-navigation-header">Navigation</h2>
+                    <h3>Artikel</h3>
+                    {{-- TODO replace dummy links with real routes once they are present --}}
+                    <a href="#">
+                        <i class="fa fa-file fa-2x" aria-hidden="true"></i>
+                        <span>Neu</span>
+                    </a>
+                    <a href="#"><i class="fa fa-clock-o fa-2x" aria-hidden="true"></i>
+                        <span>Letzte Artikel</span>
+                    </a>
+                    <a href="#"><i class="fa fa-folder fa-2x" aria-hidden="true"></i>
+                        <span>Seitenstruktur</span>
+                    </a>
+                    <h3>Events und Filme</h3>
+                    <a href="#">
+                        <i class="fa fa-calendar-plus-o fa-2x" aria-hidden="true"></i>
+                        <span>Neu</span>
+                    </a>
+                    <a href="#">
+                        <span class="fa-stack">
+                            <i class="fa fa-calendar-o fa-stack-2x" aria-hidden="true"></i>
+                            <i class="fa fa-clock-o fa-stack-1x" aria-hidden="true"></i>
+                        </span>
+                        <span>Letzte Events</span>
+                    </a>
+                    <a href="#">
+                        <i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
+                        <span>Nach Zeit</span>
+                    </a>
+                </nav>
+            </div>
+        @endauth
         <main>
             @if (session('status'))
                 <div class="alert alert-success" role="alert">
