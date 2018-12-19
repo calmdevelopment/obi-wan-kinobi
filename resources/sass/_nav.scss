@@ -15,7 +15,7 @@ nav a {
 }
 
 // by default, it hides the main-navigation
-#toggle-nav ~ .main-navigation{
+#toggle-nav ~ .main-navigation {
     position: fixed;
     overflow: hidden;
     left: 0;
@@ -25,6 +25,18 @@ nav a {
     // hide by translating it down the full height of toggle-nav
     transform: translateY(100%);
     transition: transform .25s;
+    // it is always shown on viewports wide enough
+    @media all and (min-width: $navigation-breakpoint) {
+        position: static;
+        transform: none;
+        background-color: $medium-box-bg;
+        color: $medium-box-fg;
+        nav {
+            width: 100%;
+            padding: 0 1rem;
+        }
+        // for detailed positioning inside the #app grid that is applied on wider viewports, see app.scss
+    }
 }
 
 // once #toggle-nav is checked, it shows the main-navigation
@@ -182,6 +194,13 @@ label[for='toggle-nav'] {
             width: 100%;
             justify-content: end;
         }
+    }
+}
+
+// Shortcuts are not needed on wider viewports (the navigation is shown then)
+@media all and (min-width: $navigation-breakpoint) {
+    .shortcut {
+        display: none;
     }
 }
 

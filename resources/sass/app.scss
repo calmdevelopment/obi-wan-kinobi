@@ -28,6 +28,25 @@ body {
     flex: 1;
     display: flex;
     flex-flow: column nowrap;
+    @media all and (min-width: $navigation-breakpoint) {
+        display: grid;
+        align-content: stretch;
+        grid-template-columns: 15rem 1fr;
+        grid-template-rows: 3rem 1fr;
+        // fixes an issue in Chrome 71, where the content was not stretched.
+        // Even align-content: stretch; wouldn't stretch the grid. #app
+        // had full height, as the inspector showed, but the grid
+        // was not properly aligned.
+        // Interestingly enough align-content: center; worked as expected
+        // without specifying a min-height.
+        min-height: 100vh;
+        .global {
+            grid-column: 1 / -1;
+        }
+        .main-navigation {
+            grid-column: 1 / 1;
+        }
+    }
 }
 
 // use this class to hide text, but keep it for screen-readers
