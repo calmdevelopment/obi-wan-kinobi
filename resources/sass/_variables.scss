@@ -1,13 +1,14 @@
-
-// Body
-$body-bg: #f8fafc;
-
 // Typography
-$font-family-sans-serif: "Nunito", sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$font-family-sans-serif: "open-sans", sans-serif;
 
 // Colors
+$grey-darkest: #333;
+$grey-darker: #444;
+$grey-dark: #555;
+$grey-medium: #999;
+$grey-light: #bbb;
+$grey-lighter: #ccc;
+$grey-lightest: #ddd;
 $blue: #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
@@ -15,6 +16,28 @@ $pink: #f66D9b;
 $red: #e3342f;
 $orange: #f6993f;
 $yellow: #ffed4a;
+$green-dark: #408040;
 $green: #38c172;
+$green-light: #b3ffb3;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+// context
+$body-bg: #f8fafc;
+$text-fg: $grey-dark;
+
+$dark-box-bg: $grey-darkest;
+$dark-box-fg: $grey-lightest;
+
+$medium-box-bg: $grey-dark;
+$medium-box-fg: $grey-lightest;
+
+$light-box-bg: $grey-lighter;
+$light-box-fg: $grey-dark;
+
+$form-input-border: $grey-medium;
+$form-input-focus: $teal;
+$form-input-error: $red;
+
+// breakpoints
+$navigation-breakpoint: 640px;

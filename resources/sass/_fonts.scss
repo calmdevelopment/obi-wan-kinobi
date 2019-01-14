@@ -1,0 +1,33 @@
+// Variables for available font-weights. As these are tied to the font setup, they are not placed in variables,
+// but here, to be closer to the related entities.
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// A map for the specimen to declare
+$font-specimen: (
+    light: (weight: $font-weight-light, style: normal),
+    regular: (weight: $font-weight-regular, style: normal),
+    italic: (weight:  $font-weight-regular, style: italic),
+    semibold: (weight: $font-weight-semibold, style: normal),
+    bold: (weight: $font-weight-bold, style: normal)
+);
+
+// open-sans font family name and file prefix.
+$font-prefix: 'open-sans';
+$font-suffix: '-latin-ext';
+
+@each $type, $variants in $font-specimen {
+    @font-face {
+        font-family: $font-prefix;
+        font-style: #{map-get($variants, 'style')};
+        font-weight: #{map-get($variants, 'weight')};
+        src: url('../fonts/#{$font-prefix + '-' + $type + $font-suffix}.woff') format('woff');
+    }
+}
+
+// font awesome
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome';

@@ -4,10 +4,7 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
-require('./bootstrap');
-
-window.Vue = require('vue');
+import Vue from 'vue';
 
 /**
  * The following block of code may be used to automatically register your
@@ -28,6 +25,16 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app'
+new Vue({
+    el: '#app',
+    data() {
+        return {
+            isTouchDevice: false,
+        }
+    },
+    mounted() {
+      this.$nextTick(() => {
+          this.isTouchDevice = "ontouchstart" in document.documentElement;
+      })
+    },
 });

@@ -1,14 +1,105 @@
-
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
-// Variables
-@import 'variables';
-
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+// use border-box as default sizing method to simplify dimension calculations
+*, *:before, *:after {
+    box-sizing: border-box;
 }
+
+@import 'fonts';
+@import 'variables';
+@import 'nav';
+@import 'form';
+
+body {
+    font-family: $font-family-sans-serif;
+
+    background-color: $body-bg;
+    color: $text-fg;
+
+    // child elements shall stretch to the full height
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: stretch;
+
+    min-height: 100vh;
+    min-width: 320px;
+    margin: 0;
+}
+
+#app {
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    @media all and (min-width: $navigation-breakpoint) {
+        display: grid;
+        align-content: stretch;
+        grid-template-columns: 15rem 1fr;
+        grid-template-rows: 3rem 1fr;
+        // fixes an issue in Chrome 71, where the content was not stretched.
+        // Even align-content: stretch; wouldn't stretch the grid. #app
+        // had full height, as the inspector showed, but the grid
+        // was not properly aligned.
+        // Interestingly enough align-content: center; worked as expected
+        // without specifying a min-height.
+        min-height: 100vh;
+        .global {
+            grid-column: 1 / -1;
+        }
+        // navigation is only shown when authenticated. So when we're a guest
+        // we need to span main over all columns. This is denoted by
+        // #app class="guest" (see app.blade.php)
+        &.guest main {
+            grid-column: 1 / -1;
+        }
+        .main-navigation {
+            grid-column: 1 / 1;
+        }
+    }
+}
+
+// use this class to hide text, but keep it for screen-readers
+.hidden {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+main {
+    padding: 1rem;
+    &>*:first-child {
+        margin-top: 0;
+    }
+    display: flex;
+    flex-flow: column nowrap;
+
+    a {
+        color: $teal;
+    }
+}
+
+.center{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1, h2, h3 {
+    font-weight: $font-weight-light;
+}
+
+.alert {
+    position: sticky;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding: 1rem;
+    border: 1px solid $grey-dark;
+    background-color: rgba($grey-lightest,.9);
+    color: $text-fg;
+}
+
+.alert-success {
+    border: 1px solid $green-dark;
+    background-color: rgba($green-light, .9);
+    color: $green-dark;
+}
+
+

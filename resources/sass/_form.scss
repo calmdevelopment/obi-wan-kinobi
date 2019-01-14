@@ -1,0 +1,37 @@
+$text-based-input-types: 'text', 'number', 'tel', 'email', 'password';
+$text-based-inputs: '';
+@each $input-type in $text-based-input-types  {
+    $text-based-inputs: append($text-based-inputs, unquote('input[type=#{$input-type}]'), 'comma');
+}
+.form {
+    label, #{$text-based-inputs}, textarea{
+        display: block;
+        width: 100%;
+    }
+
+    & > div {
+        margin: 1rem 0;
+        &.checkbox {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: start;
+        }
+    }
+    input, textarea {
+        border: 1px solid $form-input-border;
+        border-bottom: 3px solid $form-input-border;
+        line-height: 1.5;
+        padding: .5rem;
+    }
+    input:focus, textarea:focus {
+        border-bottom-color: $form-input-focus;
+    }
+    .is-invalid {
+        border-bottom-color: $form-input-error;
+    }
+    .invalid-feedback {
+        font-size: .75rem;
+        color: $form-input-error;
+    }
+}

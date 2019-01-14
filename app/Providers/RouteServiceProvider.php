@@ -36,6 +36,11 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
+
+        // These routes are only available when not in production mode
+        if (!$this->app->environment('production')) {
+            $this->mapLocalRoutes();
+        }
     }
 
     /**
@@ -65,5 +70,16 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Define "local" routes for local development, not be available on production.
+     */
+    protected function mapLocalRoutes()
+    {
+        Route::prefix('local')
+            ->middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/local.php'));
     }
 }
